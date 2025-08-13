@@ -12,4 +12,4 @@ python-dateutil==2.9.0.post0
 scipy==1.16.1
 setuptools==80.9.0
 six==1.17.0
-rtlobs @ https://github.com/EmmanuelSchaan/rtlobs.git
+rtlobs @ git+https://github.com/EmmanuelSchaan/rtlobs.git
