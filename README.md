@@ -32,19 +32,3 @@ Assuming you're in the root of `RuideFu/teeny-tiny-telescope`:
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
-
-## 3. Install `rtlobs` (`EmmanuelSchaan/rtlobs`) locally as a dependency
-
-If you have a local clone of `rtlobs`, install it in *editable* mode so changes are picked up automatically:
-
-```bash
-pip install -e /path/to/rtlobs
-```
-
-Replace `/path/to/rtlobs` with the actual path to your local `rtlobs` repository.
-
-Alternatively, to install directly from GitHub (latest main branch):
-
-```bash
-pip install git+https://github.com/EmmanuelSchaan/rtlobs.git
-```
