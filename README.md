@@ -48,7 +48,3 @@ Alternatively, to install directly from GitHub (latest main branch):
 ```bash
 pip install git+https://github.com/EmmanuelSchaan/rtlobs.git
 ```
-
----
-You are now set up to use both `teeny-tiny-telescope` and `rtlobs` together in your Python environment.
-
