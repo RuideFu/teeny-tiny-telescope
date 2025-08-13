@@ -10,10 +10,10 @@ from ttt.plots import plot_spectrum
 from ttt.file_io import (
     save_spectrum,
     file_name,
-    print_instruction,
     load_on_off_spectrum,
 )
 from ttt.utils import SpectrumType
+from ttt.interface import print_instruction
 
 INTEGRATION_TIME = 3  # seconds
 GAIN = 50  # dB
