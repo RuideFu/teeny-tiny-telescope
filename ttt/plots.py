@@ -8,7 +8,7 @@ def plot_spectrum(freqs: np.ndarray, powers: np.ndarray, title: str, graph=None)
     """
     if graph is not None:
         graph.remove()
-    graph = plt.plot(freqs, powers / 1e6, color="b")[0]
+    graph = plt.plot(freqs / 1e6, powers, color="b")[0]
 
     plt.xlabel("Frequency (MHz)")
     plt.ylabel("Power (dB)")
@@ -21,8 +21,8 @@ def plot_on_off_spectrum(freqs: np.ndarray,
                          on_powers: np.ndarray,
                          off_powers: np.ndarray):
     fig, axis = plt.subplots()
-    axis.plot(freqs, on_powers / 1e6, color="blue", label="On Spectrum")
-    axis.plot(freqs, off_powers / 1e6, color="red", label="Off Spectrum")
+    axis.plot(freqs / 1e6, on_powers, color="blue", label="On Spectrum")
+    axis.plot(freqs / 1e6, off_powers, color="red", label="Off Spectrum")
     axis.set_xlabel("Frequency (MHz)")
     axis.set_ylabel("Power (dB)")
     axis.legend()
