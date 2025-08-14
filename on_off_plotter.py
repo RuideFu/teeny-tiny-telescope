@@ -48,10 +48,11 @@ if __name__ == "__main__":
             False,
         )
         exit(1)
-
-    print_instruction(["Loading on-off spectrum for", user_obs], False)
+    
+    title = f"On-Off Spectrum for {user_date} - {user_obs}"
+    print_instruction([f"Loading {title}"], False)
     freqs, powers = load_on_off_spectrum_from_observation(user_date, user_obs)
 
     # plot the on-off spectrum
-    plot_spectrum(freqs, powers, f"On-Off Spectrum for {user_obs}")
+    plot_spectrum(freqs, powers, title)
     plt.show()
