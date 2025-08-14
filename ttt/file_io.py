@@ -8,29 +8,51 @@ from .utils import SpectrumType
 DATA_PATH = "data"
 
 
-def file_name(
-    spectrum_type: SpectrumType,
-    time_stamp: datetime,
-    gain: int,
-    integration_time: float,
-) -> str:
+def date_path(date: datetime) -> str:
     """
-    Generate a file name based on the spectrum type, gain, and integration time.
+    Generate a path for the observation date.
     Args:
-        spectrum_type (SpectrumType): The type of spectrum.
+        date (datetime): The date of the observation.
+    Returns:
+        str: The path for the observation date.
+    """
+    return os.path.join(DATA_PATH, date.strftime("%Y%m%d"))
+
+
+def observation_path(date: datetime, gain: int,
+                     integration_time: float) -> str:
+    """
+    Generate a path for the observation based on date, gain, and integration time.
+    Args:
+        date (datetime): The date of the observation.
         gain (int): Gain in dB.
         integration_time (float): Integration time in seconds.
     Returns:
-        str: Generated file name.
+        str: The path for the observation.
     """
-    date = time_stamp.strftime("%Y%m%d")
-    date_path = os.path.join(DATA_PATH, date)
-    if not os.path.exists(date_path):
-        os.makedirs(date_path)
     return os.path.join(
-        date,
-        f"{time_stamp.strftime('%Y%m%d_%H%M%S')}_{spectrum_type.value}_{gain}db_{integration_time}s.npy",
+        date_path(date),
+        f"{date.strftime('%H:%M:%S')}_{gain}dB_{integration_time}s"
     )
+
+
+def file_path(spectrum_type: SpectrumType, date: datetime, gain: int,
+              integration_time: float) -> str:
+    """
+    Generate a file path for the spectrum data.
+    Args:
+        spectrum_type (SpectrumType): The type of spectrum (ON or OFF).
+        date (datetime): The date of the observation.
+        gain (int): Gain in dB.
+        integration_time (float): Integration time in seconds.
+    Returns:
+        str: The file path for the spectrum data.
+    """
+    _observation_path = observation_path(date, gain, integration_time)
+    if not os.path.exists(_observation_path):
+        os.makedirs(_observation_path, exist_ok=True)
+    return os.path.join(_observation_path, f"{spectrum_type.value}.npy")
+
 
 
 def save_spectrum(freqs: np.ndarray, powers: np.ndarray, filename: str):
@@ -41,12 +63,23 @@ def save_spectrum(freqs: np.ndarray, powers: np.ndarray, filename: str):
         powers (np.ndarray): Powers in dB.
         filename (str): The name of the file to save the data.
     """
-    if not os.path.exists(DATA_PATH):
-        os.makedirs(DATA_PATH)
     # Transpose to have freqs and powers in columns
     table = np.array([freqs, powers]).T
-    np.save(os.path.join(DATA_PATH, filename), table)
+    np.save(filename, table)
     print(f"Spectrum saved to {filename}")
+
+
+def load_observation_dates() -> list[str]:
+    """
+    Load the observation dates from the data directory.
+    Returns:
+        list[str]: List of observation dates in YYYYMMDD format.
+    """
+    if not os.path.exists(DATA_PATH):
+        return []
+    return sorted(
+        [d for d in os.listdir(DATA_PATH) if os.path.isdir(os.path.join(DATA_PATH, d))]
+    )
 
 
 def load_on_off_spectrum(time_stamp: datetime, gain: int, integration_time: float):
@@ -59,11 +92,8 @@ def load_on_off_spectrum(time_stamp: datetime, gain: int, integration_time: floa
     Returns:
         tuple: Frequencies and the difference in powers between on and off observations.
     """
-    on_filename = file_name(SpectrumType.ON, time_stamp, gain, integration_time)
-    off_filename = file_name(SpectrumType.OFF, time_stamp, gain, integration_time)
-
-    on_data = np.load(os.path.join(DATA_PATH, on_filename))
-    off_data = np.load(os.path.join(DATA_PATH, off_filename))
+    on_data = np.load(file_path(SpectrumType.ON, time_stamp, gain, integration_time))
+    off_data = np.load(file_path(SpectrumType.OFF, time_stamp, gain, integration_time))
     on_freqs, on_powers = on_data[:, 0], on_data[:, 1]
     off_powers = off_data[:, 1]
     return on_freqs, on_powers - off_powers
