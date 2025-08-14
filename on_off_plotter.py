@@ -5,10 +5,11 @@ from matplotlib import pyplot as plt
 from ttt.file_io import (
     load_observation_dates,
     load_observation_paths,
+    load_on_and_off_spectrum_from_observation,
     load_on_off_spectrum_from_observation,
 )
 from ttt.interface import print_instruction
-from ttt.plots import plot_spectrum
+from ttt.plots import plot_on_off_spectrum, plot_spectrum
 
 
 if __name__ == "__main__":
@@ -55,4 +56,7 @@ if __name__ == "__main__":
 
     # plot the on-off spectrum
     plot_spectrum(freqs, powers, title)
+
+    freqs, on_powers, off_powers = load_on_and_off_spectrum_from_observation(user_date, user_obs)
+    plot_on_off_spectrum(freqs, on_powers, off_powers)
     plt.show()

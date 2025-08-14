@@ -94,8 +94,7 @@ def load_observation_paths(date_str: str) -> list[str]:
     return sorted([f for f in os.listdir(date_path)])
 
 
-def load_on_off_spectrum(time_stamp: datetime, gain: int,
-                         integration_time: float):
+def load_on_off_spectrum(time_stamp: datetime, gain: int, integration_time: float):
     """
     Load the on and off spectrum data based on the timestamp, gain, and integration time.
     Args:
@@ -105,10 +104,8 @@ def load_on_off_spectrum(time_stamp: datetime, gain: int,
     Returns:
         tuple: Frequencies and the difference in powers between on and off observations.
     """
-    on_data = np.load(
-        file_path(SpectrumType.ON, time_stamp, gain, integration_time))
-    off_data = np.load(
-        file_path(SpectrumType.OFF, time_stamp, gain, integration_time))
+    on_data = np.load(file_path(SpectrumType.ON, time_stamp, gain, integration_time))
+    off_data = np.load(file_path(SpectrumType.OFF, time_stamp, gain, integration_time))
     on_freqs, on_powers = on_data[:, 0], on_data[:, 1]
     off_powers = off_data[:, 1]
     return on_freqs, on_powers - off_powers
@@ -117,7 +114,7 @@ def load_on_off_spectrum(time_stamp: datetime, gain: int,
 def load_on_off_spectrum_from_observation(
     date_str: str,
     observation_str: str,
-): 
+):
     """
     Load the on and off spectrum data from a specific observation.
     Args:
@@ -132,3 +129,23 @@ def load_on_off_spectrum_from_observation(
     on_freqs, on_powers = on_data[:, 0], on_data[:, 1]
     off_powers = off_data[:, 1]
     return on_freqs, on_powers - off_powers
+
+
+def load_on_and_off_spectrum_from_observation(
+    date_str: str,
+    observation_str: str,
+):
+    """
+    Load both on and off spectrum data from a specific observation.
+    Args:
+        date_str (str): The date in YYYYMMDD format.
+        observation_str (str): The observation identifier.
+    Returns:
+        tuple: Frequencies, on powers, and off powers.
+    """
+    date_path = os.path.join(DATA_PATH, date_str, observation_str)
+    on_data = np.load(os.path.join(date_path, SpectrumType.ON.value + ".npy"))
+    off_data = np.load(os.path.join(date_path, SpectrumType.OFF.value + ".npy"))
+    on_freqs, on_powers = on_data[:, 0], on_data[:, 1]
+    off_powers = off_data[:, 1]
+    return on_freqs, on_powers, off_powers
