@@ -17,11 +17,12 @@ from ttt.interface import print_instruction
 
 INTEGRATION_TIME = 1  # seconds
 GAIN = 50  # dB
+BIN_SIZE = 512
 
 
 if __name__ == "__main__":
     time_stamp = datetime.now()
-    with RTLSDR(integration_time=INTEGRATION_TIME, gain=GAIN) as rtl:
+    with RTLSDR(integration_time=INTEGRATION_TIME, gain=GAIN, bin_size=BIN_SIZE) as rtl:
 
         # off observation first:
         print_instruction(
