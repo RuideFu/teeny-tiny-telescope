@@ -1,0 +1,26 @@
+[project]
+name = "teeny-tiny-telescope"
+version = "0.1.0"
+description = "A homebrew radio telescope using RTL-SDR"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "contourpy==1.3.3",
+    "cycler==0.12.1",
+    "fonttools==4.59.0",
+    "kiwisolver==1.4.9",
+    "matplotlib==3.10.5",
+    "numpy==2.3.2",
+    "packaging==25.0",
+    "pillow==11.3.0",
+    "pyparsing==3.2.3",
+    "pyrtlsdr==0.3.0",
+    "python-dateutil==2.9.0.post0",
+    "rtlobs",
+    "scipy==1.16.1",
+    "setuptools==80.9.0",
+    "six==1.17.0",
+]
+
+[tool.uv.sources]
+rtlobs = { git = "https://github.com/EmmanuelSchaan/rtlobs.git" }
