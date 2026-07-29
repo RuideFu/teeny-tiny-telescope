@@ -95,5 +95,17 @@ Each application is a standalone script run from the repository root.
   lines and optionally waits for user input.
 - `utils.py` — shared constants and enums: `H1_LINE` (the 1420.405751768 MHz
   hydrogen line, the default center frequency) and `SpectrumType`.
-- `mount.py` — placeholder for future antenna-mount control.
+- `mount.py` — `PMCEight` class for driving an Explore Scientific PMC-Eight
+  mount (iEXOS-100-02) over serial, following the
+  [PMC-Eight Programmer's Reference](https://02d3287.netsolhost.com/pmc-eight/PMC_Eight_ProgrammersReferenceManual_Release2_2019_March_07.pdf)
+  DOC-ESPMC8-002 Rev. 1.2. Use it as a context manager so the mount is halted
+  on exit. Provides axis position/target/rate reads, `point_to()` slews,
+  `move_axis_to()` / `move_axis_by()` moves that wait for arrival, `halt()`,
+  `stop_axis_drive()`, and RA tracking control. Verified against firmware
+  20A01, which departs from the manual in several places — see the module
+  docstring. Most notably `ESSr` sets an axis's *standing* rate rather than a
+  slew rate, and RA powers up with it at sidereal, so RA keeps moving after
+  every slew until that register is zeroed; `ESTr` alone does not stop it.
+  Run `uv run ttt/mount.py` for a motion self-test; set the serial port there
+  first (`ls /dev/cu.usb*`).
 
