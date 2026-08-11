@@ -30,7 +30,7 @@ def observation_path(date: datetime, gain: int, integration_time: float) -> str:
         str: The path for the observation.
     """
     return os.path.join(
-        date_path(date), f"{date.strftime('%H:%M:%S')}_{gain}dB_{integration_time}s"
+        date_path(date), f"{date.strftime('%H%M%S')}_{gain}dB_{integration_time}s"
     )
 
 
