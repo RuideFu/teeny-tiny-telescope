@@ -14,7 +14,7 @@ dependencies = [
     "packaging==25.0",
     "pillow==11.3.0",
     "pyparsing==3.2.3",
-    "pyrtlsdr==0.3.0",
+    "pyrtlsdrlib==0.3.0",
     "pyserial>=3.5",
     "python-dateutil==2.9.0.post0",
     "rtlobs",
