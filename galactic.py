@@ -15,21 +15,24 @@ from ttt.file_io import (
 from ttt.utils import SpectrumType
 from ttt.interface import print_instruction
 
-INTEGRATION_TIME = 1  # seconds
+INTEGRATION_TIME = 180  # seconds, changed to 180 from 1 second
 GAIN = 50  # dB
 BIN_SIZE = 512
 
-OFF_RA = 20
-OFF_DEC = 40
+OFF_RA = 1
+OFF_DEC = 90
 
-TARGET_RA = 18.0  # Right Ascension in hours
-TARGET_DEC = -20.0  # Declination in degrees
+# TARGET_RA = 16.7  # Right Ascension in hours
+# TARGET_DEC = -17.5  # Declination in degrees
+
+TARGET_RA = 20.5  # Right Ascension in hours
+TARGET_DEC = 45   # Declination in degrees
 
 if __name__ == "__main__":
 
     # set up mount
-    telescope_prog_id = choose_driver("Telescope")
-    telescope = connect(telescope_prog_id)
+    # telescope_prog_id = choose_driver("Telescope")
+    telescope = connect("ASCOM.ES_PMC8.Telescope")
 
     try:
         time_stamp = datetime.now()

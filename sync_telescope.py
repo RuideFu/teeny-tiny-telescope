@@ -27,8 +27,10 @@ def green_bank_lst() -> float:
 
 
 def main() -> None:
-    telescope_prog_id = choose_driver("Telescope")
-    telescope = connect(telescope_prog_id)
+    # telescope_prog_id = choose_driver("Telescope")
+    # print(telescope_prog_id)
+    telescope = connect("ASCOM.ES_PMC8.Telescope")
+    
 
     try:
         if not telescope.CanSync:
@@ -57,7 +59,7 @@ def main() -> None:
             "Synchronizing to "
             f"RA {format_hours(lst)} LST, Dec {NORTH_CELESTIAL_POLE_DEC:+.1f} deg"
         )
-        telescope.SyncToCoordinates(lst, NORTH_CELESTIAL_POLE_DEC)
+        telescope.SyncToCoordinates(lst, GREEN_BANK_LATITUDE)
         telescope.SetPark()
         print(
             "Synchronization complete and current position set as park. Mount reports "

@@ -4,6 +4,8 @@ from rtlobs import collect, utils
 
 from .utils import H1_LINE
 
+from rtlsdr import RtlSdr
+
 
 class RTLSDR:
 
@@ -41,7 +43,7 @@ class RTLSDR:
             self: The instance of RTLSDR.
         """
         self.sdr = collect.get_sdr(self._sample_rate, self.get_center_freq, self._gain)
-        self.bias_tee_on()
+        self.bias_tee_off()
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -90,7 +92,7 @@ class RTLSDR:
         """
         # Code to turn on the bias tee
         try:
-            utils.biast(1, index=0)
+            self.sdr.set_bias_tee(True)
             print("Bias Tee turned on.")
         except Exception as e:
             print(f"Error turning on bias tee: {e}")
@@ -101,7 +103,7 @@ class RTLSDR:
         """
         # Code to turn off the bias tee
         try:
-            utils.biast(0, index=0)
+            self.sdr.set_bias_tee(False)
             print("Bias Tee turned off.")
         except Exception as e:
             print(f"Error turning off bias tee: {e}")

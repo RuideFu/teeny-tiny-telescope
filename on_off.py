@@ -15,7 +15,7 @@ from ttt.file_io import (
 from ttt.utils import SpectrumType
 from ttt.interface import print_instruction
 
-INTEGRATION_TIME = 1  # seconds
+INTEGRATION_TIME = 90  # seconds
 GAIN = 50  # dB
 BIN_SIZE = 512
 
