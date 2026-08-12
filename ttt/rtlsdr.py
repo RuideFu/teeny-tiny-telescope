@@ -1,10 +1,8 @@
 from datetime import datetime, timedelta, timezone
 
-from rtlobs import collect, utils
+from rtlobs import collect
 
 from .utils import H1_LINE
-
-from rtlsdr import RtlSdr
 
 
 class RTLSDR:
@@ -35,6 +33,7 @@ class RTLSDR:
         self._sample_rate = sample_rate
         self._center_freq = center_freq
         self._integration_time = integration_time
+        self.sdr = None
 
     def __enter__(self):
         """
@@ -43,7 +42,11 @@ class RTLSDR:
             self: The instance of RTLSDR.
         """
         self.sdr = collect.get_sdr(self._sample_rate, self.get_center_freq, self._gain)
-        self.bias_tee_off()
+        try:
+            self.bias_tee_on()
+        except Exception:
+            self.disconnect()
+            raise
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -74,7 +77,7 @@ class RTLSDR:
             float: Current gain in dB to 2 decimal places.
         """
         return round(self._gain, 2)
-        
+
 
     def set_gain(self, gain: float):
         """
@@ -90,23 +93,21 @@ class RTLSDR:
         """
         Turn on the bias tee to power the LNA.
         """
-        # Code to turn on the bias tee
-        try:
-            self.sdr.set_bias_tee(True)
-            print("Bias Tee turned on.")
-        except Exception as e:
-            print(f"Error turning on bias tee: {e}")
+        if self.sdr is None:
+            raise RuntimeError("RTL-SDR is not connected. Cannot turn on bias tee.")
+
+        self.sdr.set_bias_tee(True)
+        print("Bias Tee turned on.")
 
     def bias_tee_off(self):
         """
         Turn off the bias tee to power off the LNA.
         """
-        # Code to turn off the bias tee
-        try:
-            self.sdr.set_bias_tee(False)
-            print("Bias Tee turned off.")
-        except Exception as e:
-            print(f"Error turning off bias tee: {e}")
+        if self.sdr is None:
+            return
+
+        self.sdr.set_bias_tee(False)
+        print("Bias Tee turned off.")
 
     def take_exposure(self):
         """
@@ -140,8 +141,9 @@ class RTLSDR:
         """
         Disconnect the RTL-SDR.
         """
-        if self.sdr:
+        if self.sdr is not None:
             self.sdr.close()
+            self.sdr = None
             print("RTL-SDR disconnected.")
         else:
             print("RTL-SDR is not connected.")
